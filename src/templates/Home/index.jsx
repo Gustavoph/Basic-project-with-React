@@ -14,20 +14,17 @@ export const Home = () => {
 
   const noMorePosts = page + postsPerPage >= allPosts.length;
 
-  const filteredPosts = searchValue ?
-    allPosts.filter(post => {
-      return post.title
-        .toLowerCase()
-        .includes(searchValue
-          .toLocaleLowerCase())
-    })
+  const filteredPosts = searchValue
+    ? allPosts.filter((post) => {
+        return post.title.toLowerCase().includes(searchValue.toLocaleLowerCase());
+      })
     : posts;
 
   const handleLoadPosts = useCallback(async (page, postsPerPage) => {
     const postsAndPhotos = await loadPosts();
     setPosts(postsAndPhotos.slice(page, postsPerPage));
-    setAllPosts(postsAndPhotos)
-  }, [])
+    setAllPosts(postsAndPhotos);
+  }, []);
 
   useEffect(() => {
     handleLoadPosts(0, postsPerPage);
@@ -39,13 +36,13 @@ export const Home = () => {
     posts.push(...nextPosts);
 
     setPosts(posts);
-    setPage(nextPage)
-  }
+    setPage(nextPage);
+  };
 
   const handleChange = (event) => {
     const { value } = event.target;
     setSearchValue(value);
-  }
+  };
   return (
     <section className="container">
       <div className="search-container">
@@ -54,29 +51,16 @@ export const Home = () => {
             <h1>Search Value: {searchValue}</h1>
           </>
         )}
-        <TextInput
-          searchValue={searchValue}
-          handleChange={handleChange}
-        />
+        <TextInput searchValue={searchValue} handleChange={handleChange} />
       </div>
 
-      {filteredPosts.length > 0 && (
-        <Posts posts={filteredPosts} />
-      )}
+      {filteredPosts.length > 0 && <Posts posts={filteredPosts} />}
 
-      {filteredPosts.length === 0 && (
-        <p>There are no posts</p>
-      )}
+      {filteredPosts.length === 0 && <p>There are no posts</p>}
 
       <div className="button-container">
-        {!searchValue && (
-          <Button
-            title={'Load more posts'}
-            onClick={loadMorePosts}
-            disabled={noMorePosts}
-          />
-        )}
+        {!searchValue && <Button title={'Load more posts'} onClick={loadMorePosts} disabled={noMorePosts} />}
       </div>
     </section>
-  )
-}
+  );
+};
